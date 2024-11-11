@@ -1,0 +1,27 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  k6-performance-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install k6
+      run: |
+        sudo snap install k6
+
+    - name: Run k6 performance test
+      run: k6 run --out json=result.json script.js
+
+    - name: Upload results
+      uses: actions/upload-artifact@v4
+      with:
+        name: k6-test-results
+        path: result.json
